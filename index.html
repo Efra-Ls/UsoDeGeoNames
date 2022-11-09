@@ -16,8 +16,10 @@
 
          $('#codigoPostal').blur(function(e) {
             
-         var espe=4000;
-         
+         var espe=6000;
+         var valorEstado="";
+         var valormunicipio="";
+         var valorColonia="";
          $.ajax({  
           type: "GET",  
           url: "https://data.opendatasoft.com/api/records/1.0/search/?dataset=geonames-postal-code%40public&q="+$(this).val()+"&facet=country_code&facet=admin_name1&facet=admin_code1&facet=admin_name2&refine.country_code="+$("#selec_pais").val()+" ", 
@@ -34,14 +36,23 @@
             $('#selec_localidad').empty();
             
             $.each(data.records, function(i,item){
-                 $('#selec_estado').prepend('<option value="'+
-                 item.fields.admin_name1+'">'+item.fields.admin_name1+'</option>'); 
 
-                 $('#selec_municipio').prepend('<option value="'+
-                 item.fields.admin_name2+'">'+item.fields.admin_name2+'</option>'); 
+               if(valorEstado!=item.fields.admin_name1){
+                  $('#selec_estado').prepend('<option value="'+
+                 item.fields.admin_name1+'">'+item.fields.admin_name1+'</option>'); 
+                 }
+                 valorEstado=item.fields.admin_name1;                                  
                  
-                 $('#selec_localidad').prepend('<option value="'+
-                 item.fields.place_name+'">'+item.fields.place_name+'</option>'); 
+                 if(valormunicipio!=item.fields.admin_name2){
+                  $('#selec_municipio').prepend('<option value="'+
+                  item.fields.admin_name2+'">'+item.fields.admin_name2+'</option>'); 
+                 }
+                 valormunicipio=item.fields.admin_name2; 
+          
+                  $('#selec_localidad').prepend('<option value="'+
+                 item.fields.place_name+'">'+item.fields.place_name+'</option>');
+
+                 
 
              });  
                                    
